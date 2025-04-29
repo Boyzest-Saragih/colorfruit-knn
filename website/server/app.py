@@ -1,6 +1,6 @@
 import joblib
 import numpy as np
-from flask import Flask, request,jsonify
+from flask import Flask, request,jsonify, render_template
 import cv2
 import os
 
@@ -8,7 +8,7 @@ import os
 model = joblib.load('../../model/knn_model.pkl')
 scaler = joblib.load('../../model/scaler.pkl')
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder = 'templates')
 
 def imageToHsv (img):
     image = cv2.imread(img)
@@ -23,6 +23,10 @@ def imageToHsv (img):
 
     features = np.array([h_mean,s_mean, v_mean,h_std,s_std,v_std])
     return features
+
+@app.route('/')
+def home():
+    return render_template('predict_img.html')
 
 @app.route('/knn_predict', methods=['POST'])
 def predict():
@@ -49,4 +53,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host = '0.0.0.0', port=8000)
