@@ -1,6 +1,7 @@
 import joblib
 import numpy as np
 from flask import Flask, request,jsonify, render_template
+from flask_cors import CORS
 import cv2
 import os
 
@@ -9,6 +10,7 @@ model = joblib.load('../../model/knn_model.pkl')
 scaler = joblib.load('../../model/scaler.pkl')
 
 app = Flask(__name__, template_folder = 'templates')
+CORS(app)
 
 def imageToHsv (img):
     image = cv2.imread(img)
